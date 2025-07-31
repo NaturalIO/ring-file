@@ -1,13 +1,13 @@
 [package]
 name = "ring-file"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2018"
 license = "MIT"
 authors = ["plan <frostyplanet@gmail.com>"]
 categories = ["development-tools::debugging", "data-structures"]
 documentation = "https://docs.rs/ring-file"
 keywords = ["log", "file", "data"]
-description="""A ring buffer like file struture, currently a placeholder"""
+description="""A debugging tool with ring buffer like file struture, for high-performance code development"""
 
 [dependencies]
 io-buffer = "^1.0.3"

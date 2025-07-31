@@ -35,7 +35,7 @@ pub struct RingFile {
 
 impl RingFile {
 
-    /// Allocate a whole buffer specified by `buf_size`
+    /// Allocate a whole buffer specified by `buf_size`, size can not exceed 2GB.
     pub fn new<P: Into<PathBuf>>(buf_size: i32, file_path: P) -> Self {
         assert!(buf_size > 0);
         let inner = Buffer::alloc(buf_size).expect("alloc");

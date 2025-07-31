@@ -1,10 +1,25 @@
 //! # RingFile
 //!
-//! This crate provides a ring buffer like file, in order to store log content.
-//! Integrated into [captain-log](https://docs.rs/captains-log) as `RingFile` log sink.
+//! The purpose of this tool is to help debug deadlock problems, that only occur under
+//! high-performance scenarios. Because writing log to disk will slow down execution,
+//! which makes deadlock hidden without racing conditions met.
 //!
-//! The content keeps in memory when written, only the last part of buf_size is kept.
-//! After write is done, you can dump the content to disk.
+//! This crate provides a ringbuffer like file, in order to store byte content.
+//! Already integrated into [captain-log](https://docs.rs/captains-log) as `LogRingFile` sink.
+//!
+//! The content is kept in memory when written, when offset rewinds, new content will overwrite old content,
+//! So that memory consumption is limited to buf_size.
+//! Once deadlock encountered and process hangs, no more message will be written,
+//! you can safely dump the content to disk.
+//!
+//! # Example:
+//!
+//! ```rust
+//! use ring_file::RingFile;
+//! let mut file = RingFile::new(512*1024*1024, "/tmp/ringfile.store");
+//! file.write_all("log message").expect("write ok");
+//! file.dump().expect("dump ok");
+//! ```
 
 use std::path::PathBuf;
 use io_buffer::{Buffer, safe_copy};
@@ -47,6 +62,8 @@ impl RingFile {
 
 impl std::io::Write for RingFile {
 
+    /// Write will abort when reaching the boundary of buffer, rewind the offset to 0 and return the bytes written.
+    /// You can use Write::write_all() provided by the trait to cover the rewinding logic.
     #[inline]
     fn write(&mut self, buf: &[u8]) -> Result<usize> {
         let bound = self.inner.capacity();

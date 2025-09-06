@@ -211,4 +211,8 @@ impl RingFile {
         });
         buf.write(ts, content);
     }
+
+    pub fn clear(&mut self) {
+        self.buffers.clear();
+    }
 }

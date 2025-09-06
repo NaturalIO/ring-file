@@ -12,19 +12,12 @@ The purpose of this tool is to help debug deadlock problems, that only occur und
 high-performance scenarios. Because writing log to disk will slow down execution,
 which makes deadlock hidden without racing conditions met.
 
-This crate provides a ringbuffer like file, in order to store byte content.
+This crate provides two abstraction:
+
+`RingBuffer`: to store byte content in memory when written.
+when offset rewinds, new content will overwrite old content,
+so that memory consumption is limited to buf_size.
+
+`RingFile`: to record log content in memory for multi-threaded program. Act as an observer to
+analyze concurrency problem. It maintain thread local buffer to avoid lock contention.
 Already integrated into [captain-log](https://docs.rs/captains-log) as `LogRingFile` sink.
-
-The content is kept in memory when written, when offset rewinds, new content will overwrite old content,
-So that memory consumption is limited to buf_size.
-Once deadlock encountered and process hangs, no more message will be written,
-you can safely dump the content to disk.
-
-# Example:
-
-```rust
-use ring_file::RingFile;
-let mut file = RingFile::new(512*1024*1024, "/tmp/ringfile.log");
-file.write_all("log message").expect("write ok");
-file.dump().expect("dump ok");
-```

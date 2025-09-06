@@ -197,7 +197,7 @@ impl RingFile {
                 }
             }
         } else {
-            let mut f = stdout().lock();
+            let mut f = stdout();
             dump_all!(f);
         }
         Ok(())

@@ -1,6 +1,6 @@
 [package]
 name = "ring-file"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2018"
 license = "MIT"
 authors = ["plan <frostyplanet@gmail.com>"]
@@ -12,5 +12,4 @@ description="""A debugging tool with ring buffer like file struture, for high-pe
 [dependencies]
 io-buffer = "^1.0.3"
 thread_local = "1"
-parking_lot = "0"
 libc = "0"

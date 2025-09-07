@@ -10,7 +10,7 @@ enum Msg {
     Msg(String),
 }
 
-/// RingFile use a backend thread to maintain RingBuffer, which receive message with unbounded channel,
+/// RingFile use a backend thread to maintain RingBuffer, which receive messages with unbounded channel,
 /// to prevent lock contention affecting program execution.
 /// When program hang or panic, you can call dump() to collect the logs into file.
 pub struct RingFile {
@@ -64,7 +64,7 @@ impl RingFileBackend {
 impl RingFile {
     /// # Arguments:
     ///
-    /// - buf_size: buffer size per thread
+    /// - buf_size: total buffer size
     ///
     /// - file_path: The target file to dump
     pub fn new(buf_size: i32, file_path: Box<Path>) -> Self {
@@ -84,7 +84,7 @@ impl RingFile {
         }
     }
 
-    /// collect all the buffers, sort by timestamp and dump to disk.
+    /// Trigger dump to the disk.
     pub fn dump(&self) -> std::io::Result<()> {
         self.tx.send(Msg::Dump).expect("send");
         self.res.recv().unwrap()

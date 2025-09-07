@@ -42,6 +42,12 @@ impl RingBuffer {
             return file.write_all(&self.inner[0..self.end]);
         }
     }
+
+    #[inline]
+    pub fn clear(&mut self) {
+        self.end = 0;
+        self.full = false;
+    }
 }
 
 impl std::io::Write for RingBuffer {

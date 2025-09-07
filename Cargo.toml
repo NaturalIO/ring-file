@@ -11,5 +11,4 @@ description="""A debugging tool with ring buffer like file struture, for high-pe
 
 [dependencies]
 io-buffer = "^1.0.3"
-thread_local = "1"
-libc = "0"
+crossbeam-channel="0.5"

@@ -96,7 +96,7 @@ impl RingFile {
     }
 
     /// Clear previous buffer
-    pub fn clear(&mut self) {
+    pub fn clear(&self) {
         self.tx.send(Msg::Clear).expect("send");
     }
 }
